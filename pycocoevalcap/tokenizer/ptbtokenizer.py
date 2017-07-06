@@ -34,15 +34,34 @@ class PTBTokenizer:
         # ======================================================
         final_tokenized_captions_for_image = {}
         image_id = [k for k, v in captions_for_image.items() for _ in range(len(v))]
-        sentences = '\n'.join([c['caption'].replace('\n', ' ') for k, v in captions_for_image.items() for c in v])
+        sentences = []
+        for k, v in captions_for_image.items():
+            for c in v:
+                sent__ = c['caption'].replace('\n', ' ')
+                try:
+                    sent__.encode('ascii')
+                    sentences.append(sent__)
+                except UnicodeEncodeError:
+                    import pdb
+                    pdb.set_trace()
+                    
+                
+        sentences = '\n'.join(sentences)
 
         # ======================================================
         # save sentences to temporary file
         # ======================================================
         path_to_jar_dirname=os.path.dirname(os.path.abspath(__file__))
         tmp_file = tempfile.NamedTemporaryFile(delete=False, dir=path_to_jar_dirname)
-        tmp_file.write(sentences)
-        tmp_file.close()
+        try:
+            tmp_file.write(sentences)
+        except UnicodeEncodeError:
+            import pdb
+            pdb.set_trace()
+            print sentences[3965464]
+            exit(1)
+        finally:
+            tmp_file.close()
 
         # ======================================================
         # tokenize sentence

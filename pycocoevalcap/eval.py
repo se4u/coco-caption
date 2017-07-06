@@ -10,6 +10,8 @@ class COCOEvalCap:
         self.evalImgs = []
         self.eval = {}
         self.imgToEval = {}
+        # coco and cocoRes just need to contain one getImgIds method.
+        # and one 'imgToAnns' where each 'ann' contains a 'caption'
         self.coco = coco
         self.cocoRes = cocoRes
         self.params = {'image_id': coco.getImgIds()}

@@ -78,19 +78,21 @@ class COCO:
     def createIndex(self):
         # create index
         print 'creating index...'
-        imgToAnns = {ann['image_id']: [] for ann in self.dataset['annotations']}
-        anns =      {ann['id']:       [] for ann in self.dataset['annotations']}
-        for ann in self.dataset['annotations']:
+        annotation_list = self.dataset['annotations']
+        imgToAnns = {ann['image_id']: [] for ann in annotation_list}
+        anns =      {ann['id']:       [] for ann in annotation_list}
+        for ann in annotation_list:
             imgToAnns[ann['image_id']] += [ann]
             anns[ann['id']] = ann
-
+        cats = []
+        catToImgs = []
         imgs      = {im['id']: {} for im in self.dataset['images']}
         for img in self.dataset['images']:
             imgs[img['id']] = img
-
-        cats = []
-        catToImgs = []
+        if 'type' not in self.dataset:
+            self.dataset['type'] = 'captions'
         if self.dataset['type'] == 'instances':
+
             cats = {cat['id']: [] for cat in self.dataset['categories']}
             for cat in self.dataset['categories']:
                 cats[cat['id']] = cat
